@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}Predict - Stock Price Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .predict-container {
+        max-width: 900px;
+        margin: 2rem auto;
+    }
+
+    .page-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #4fc3f7 0%, #26c6da 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-description {
+        font-size: 1.1rem;
+        color: #b0bec5;
+    }
+
+    .prediction-form {
+        background: rgba(26, 77, 94, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(79, 195, 247, 0.2);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #e0f7fa;
+        font-size: 0.9rem;
+    }
+
+    .form-label i {
+        color: #4fc3f7;
+        margin-right: 0.3rem;
+    }
+
+    .form-input, .form-select {
+        padding: 0.8rem;
+        border: 2px solid rgba(79, 195, 247, 0.3);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: 'Inter', sans-serif;
+        background: rgba(15, 32, 39, 0.6);
+        color: #e0f7fa;
+    }
+
+    .form-input::placeholder {
+        color: #78909c;
+    }
+
+    .form-input:focus, .form-select:focus {
+        outline: none;
+        border-color: #4fc3f7;
+        box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
+        background: rgba(15, 32, 39, 0.8);
+    }
+
+    .form-select option {
+        background: #0f2027;
+        color: #e0f7fa;
+    }
+
+    .submit-button {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(135deg, #4fc3f7 0%, #26c6da 100%);
+        color: #0f2027;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(79, 195, 247, 0.3);
+    }
+
+    .submit-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(79, 195, 247, 0.4);
+    }
+
+    .result-card {
+        background: linear-gradient(135deg, #1a4d5e 0%, #0f2027 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 2rem;
+        animation: slideIn 0.5s ease;
+        border: 2px solid #4fc3f7;
+    }
+
+    .result-label {
+        font-size: 1.1rem;
+        color: #b0bec5;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-value {
+        font-size: 3rem;
+        font-weight: 800;
+        margin: 1rem 0;
+        color: #4fc3f7;
+    }
+
+    .result-info {
+        font-size: 0.9rem;
+        color: #b0bec5;
+    }
+
+    .result-info i {
+        color: #4fc3f7;
+    }
+
+    .error-card {
+        background: rgba(244, 67, 54, 0.2);
+        color: #ffcdd2;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-top: 2rem;
+        animation: slideIn 0.5s ease;
+        border: 1px solid #f44336;
+    }
+
+    .info-box {
+        background: rgba(26, 77, 94, 0.3);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        border-left: 4px solid #4fc3f7;
+    }
+
+    .info-box h3 {
+        color: #4fc3f7;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-box h3 i {
+        margin-right: 0.5rem;
+    }
+
+    .info-box p {
+        color: #b0bec5;
+        line-height: 1.6;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .prediction-form {
+            padding: 2rem 1.5rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="predict-container">
+    <div class="page-header">
+        <h1 class="page-title">Stock Price Prediction</h1>
+        <p class="page-description">Enter stock details to get AI-powered price predictions</p>
+    </div>
+
+    <div class="info-box">
+        <h3><i class="fas fa-info-circle"></i> How it works</h3>
+        <p>Our model uses deep learning to analyze multiple stock features including price history, volume, market segments, and temporal patterns to predict the closing price.</p>
+    </div>
+
+    <form method="POST" class="prediction-form">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label" for="open">
+                    <i class="fas fa-chart-line"></i> Opening Price
+                </label>
+                <input type="number" step="0.01" class="form-input" id="open" name="open" required placeholder="e.g., 150.50">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="high">
+                    <i class="fas fa-arrow-up"></i> High Price
+                </label>
+                <input type="number" step="0.01" class="form-input" id="high" name="high" required placeholder="e.g., 155.75">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="low">
+                    <i class="fas fa-arrow-down"></i> Low Price
+                </label>
+                <input type="number" step="0.01" class="form-input" id="low" name="low" required placeholder="e.g., 148.25">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="volume">
+                    <i class="fas fa-database"></i> Volume
+                </label>
+                <input type="number" class="form-input" id="volume" name="volume" required placeholder="e.g., 1000000">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="trade_date">
+                    <i class="fas fa-calendar"></i> Trade Date
+                </label>
+                <input type="date" class="form-input" id="trade_date" name="trade_date" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="universe0">
+                    <i class="fas fa-globe"></i> Universe Code
+                </label>
+                <input type="number" class="form-input" id="universe0" name="universe0" value="0" placeholder="e.g., 0">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="market_segment">
+                    <i class="fas fa-building"></i> Market Segment
+                </label>
+                <select class="form-select" id="market_segment" name="market_segment" required>
+                    <option value="">Select Segment</option>
+                    <option value="First Section (Domestic)">First Section (Domestic)</option>
+                    <option value="Second Section (Domestic)">Second Section (Domestic)</option>
+                    <option value="Mothers (Domestic)">Mothers (Domestic)</option>
+                    <option value="JASDAQ (Domestic)">JASDAQ (Domestic)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="section_products">
+                    <i class="fas fa-box"></i> Section/Products
+                </label>
+                <select class="form-select" id="section_products" name="section_products" required>
+                    <option value="">Select Section</option>
+                    <option value="Foods">Foods</option>
+                    <option value="Textiles & Apparels">Textiles & Apparels</option>
+                    <option value="Pulp & Paper">Pulp & Paper</option>
+                    <option value="Chemicals">Chemicals</option>
+                    <option value="Pharmaceutical">Pharmaceutical</option>
+                    <option value="Oil & Coal Products">Oil & Coal Products</option>
+                    <option value="Rubber Products">Rubber Products</option>
+                    <option value="Glass & Ceramics Products">Glass & Ceramics Products</option>
+                    <option value="Iron & Steel">Iron & Steel</option>
+                    <option value="Nonferrous Metals">Nonferrous Metals</option>
+                    <option value="Metal Products">Metal Products</option>
+                    <option value="Machinery">Machinery</option>
+                    <option value="Electric Appliances">Electric Appliances</option>
+                    <option value="Transportation Equipment">Transportation Equipment</option>
+                    <option value="Precision Instruments">Precision Instruments</option>
+                    <option value="Other Products">Other Products</option>
+                    <option value="Electric Power & Gas">Electric Power & Gas</option>
+                    <option value="Land Transportation">Land Transportation</option>
+                    <option value="Marine Transportation">Marine Transportation</option>
+                    <option value="Air Transportation">Air Transportation</option>
+                    <option value="Warehousing & Harbor Transportation Services">Warehousing & Harbor Transportation Services</option>
+                    <option value="Information & Communication">Information & Communication</option>
+                    <option value="Wholesale Trade">Wholesale Trade</option>
+                    <option value="Retail Trade">Retail Trade</option>
+                    <option value="Banks">Banks</option>
+                    <option value="Securities & Commodity Futures">Securities & Commodity Futures</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Other Financing Business">Other Financing Business</option>
+                    <option value="Real Estate">Real Estate</option>
+                    <option value="Services">Services</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="sector_33">
+                    <i class="fas fa-industry"></i> 33 Sector Code
+                </label>
+                <input type="number" class="form-input" id="sector_33" name="sector_33" required placeholder="e.g., 16">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="sector_17">
+                    <i class="fas fa-sitemap"></i> 17 Sector Code
+                </label>
+                <input type="number" class="form-input" id="sector_17" name="sector_17" required placeholder="e.g., 8">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="index_size_code">
+                    <i class="fas fa-ruler"></i> Index Size Code
+                </label>
+                <input type="number" class="form-input" id="index_size_code" name="index_size_code" required placeholder="e.g., 1">
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button">
+            <i class="fas fa-magic"></i> Predict Stock Price
+        </button>
+    </form>
+
+    {% if prediction %}
+    <div class="result-card">
+        <div class="result-label">Predicted Closing Price</div>
+        <div class="result-value">¥{{ "%.2f"|format(prediction) }}</div>
+        <div class="result-info">
+            <i class="fas fa-check-circle"></i> Prediction generated using deep learning model
+        </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error-card">
+        <i class="fas fa-exclamation-triangle"></i> {{ error }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Stock Price Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        text-align: center;
+        padding: 4rem 0;
+        color: white;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        animation: fadeInUp 0.8s ease;
+        background: linear-gradient(135deg, #4fc3f7 0%, #26c6da 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        font-weight: 300;
+        margin-bottom: 2rem;
+        color: #b0bec5;
+        animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 1rem 3rem;
+        background: linear-gradient(135deg, #1a4d5e 0%, #0f2027 100%);
+        color: #4fc3f7;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        animation: fadeInUp 0.8s ease 0.4s both;
+        border: 2px solid #4fc3f7;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(79, 195, 247, 0.3);
+        background: linear-gradient(135deg, #4fc3f7 0%, #26c6da 100%);
+        color: #0f2027;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+    }
+
+    .feature-card {
+        background: rgba(26, 77, 94, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 0.8s ease;
+        border: 1px solid rgba(79, 195, 247, 0.2);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(79, 195, 247, 0.2);
+        border-color: #4fc3f7;
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: #4fc3f7;
+        margin-bottom: 1rem;
+    }
+
+    .feature-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #e0f7fa;
+    }
+
+    .feature-description {
+        color: #b0bec5;
+        line-height: 1.6;
+    }
+
+    .stats-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+    }
+
+    .stat-card {
+        background: rgba(26, 77, 94, 0.5);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(79, 195, 247, 0.2);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #4fc3f7;
+    }
+
+    .stat-label {
+        color: #b0bec5;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1 class="hero-title">AI-Powered Stock Price Prediction</h1>
+    <p class="hero-subtitle">Leverage deep learning and neural networks to forecast stock market prices</p>
+    <a href="/predict" class="cta-button">
+        <i class="fas fa-rocket"></i> Start Predicting
+    </a>
+</div>
+
+<div class="stats-section">
+    <div class="stat-card">
+        <div class="stat-number">95%+</div>
+        <div class="stat-label">Accuracy</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">LSTM</div>
+        <div class="stat-label">Neural Network</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">Real-time</div>
+        <div class="stat-label">Predictions</div>
+    </div>
+</div>
+
+<div class="features-grid">
+    <div class="feature-card">
+        <div class="feature-icon">
+            <i class="fas fa-brain"></i>
+        </div>
+        <h3 class="feature-title">Deep Learning Model</h3>
+        <p class="feature-description">
+            Powered by TensorFlow and advanced neural networks with hyperparameter tuning for optimal performance.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">
+            <i class="fas fa-chart-bar"></i>
+        </div>
+        <h3 class="feature-title">Multiple Features</h3>
+        <p class="feature-description">
+            Analyzes opening price, high, low, volume, market segments, and temporal patterns for accurate predictions.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">
+            <i class="fas fa-tachometer-alt"></i>
+        </div>
+        <h3 class="feature-title">Fast Predictions</h3>
+        <p class="feature-description">
+            Get instant stock price predictions with our optimized model deployment and efficient preprocessing pipeline.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="feature-title">Data Security</h3>
+        <p class="feature-description">
+            Your input data is processed securely and never stored, ensuring complete privacy and confidentiality.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3 class="feature-title">Responsive Design</h3>
+        <p class="feature-description">
+            Access predictions from any device with our fully responsive web interface designed for modern browsers.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-icon">
+            <i class="fas fa-code"></i>
+        </div>
+        <h3 class="feature-title">Open Architecture</h3>
+        <p class="feature-description">
+            Built with Flask, TensorFlow, and scikit-learn using industry best practices and clean code architecture.
+        </p>
+    </div>
+</div>
+{% endblock %}
